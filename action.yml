@@ -1,0 +1,65 @@
+# CANONICAL COPY. Published one-way to flowharness-ai/scan-action (marketplace).
+# Any change here must be re-exported there and the v1 tag moved (Checkpoint R).
+name: "FlowHarness Scan"
+description: >-
+  Run the published zero-model FlowHarness static scanner with the caller's
+  contents: read permission, emit GitHub annotations, and propagate its gate.
+
+inputs:
+  directory:
+    description: "Directory to scan."
+    required: false
+    default: "."
+  fail-on:
+    description: "Exit gate: risk | index>N."
+    required: false
+    default: "risk"
+
+outputs:
+  exit-code:
+    description: >-
+      Raw flowharness-scan exit code (0 CLEAR, 1 NEEDS_HUMAN, 2 QUARANTINE).
+      Caveat: 1 also covers a scanner crash and 2 an argparse usage error.
+    value: ${{ steps.scan.outputs.exit-code }}
+
+runs:
+  using: composite
+  steps:
+    - name: Set up uv
+      uses: astral-sh/setup-uv@f94ec6bedd8674c4426838e6b50417d36b6ab231 # v5
+      with:
+        version: "0.12.0"
+
+    - name: Run FlowHarness scan (capture verdict)
+      id: scan
+      shell: bash
+      env:
+        FLOWHARNESS_SCAN_DIRECTORY: ${{ inputs.directory }}
+        FLOWHARNESS_SCAN_FAIL_ON: ${{ inputs.fail-on }}
+      run: |
+        code=0
+        uvx --no-config --no-sources --from flowharness==0.1.1 flowharness-scan "$FLOWHARNESS_SCAN_DIRECTORY" \
+          --format github --fail-on "$FLOWHARNESS_SCAN_FAIL_ON" || code=$?
+        echo "FLOWHARNESS_SCAN_CODE=$code" >> "$GITHUB_ENV"
+        echo "exit-code=$code" >> "$GITHUB_OUTPUT"
+
+    - name: Append verdict and FlowHarness link to the step summary
+      shell: bash
+      env:
+        FLOWHARNESS_SITE_URL: "https://flowharness.ai"
+      run: |
+        {
+          case "$FLOWHARNESS_SCAN_CODE" in
+            0) echo "## FlowHarness Scan: ✅ CLEAR — drift within tolerance" ;;
+            1) echo "## FlowHarness Scan: 🟡 NEEDS_HUMAN (or scanner error — check the log) — review required" ;;
+            2) echo "## FlowHarness Scan: 🔴 QUARANTINE (or usage error — check the log) — hard fail" ;;
+            *) echo "## FlowHarness Scan: ⚠️ unexpected exit $FLOWHARNESS_SCAN_CODE" ;;
+          esac
+          echo
+          echo "<sub>🧭 Powered by [FlowHarness](${FLOWHARNESS_SITE_URL}/?utm_source=github&utm_medium=step_summary&utm_campaign=scan) — free agent-governance checks for your PRs</sub>"
+        } >> "${GITHUB_STEP_SUMMARY:-/dev/null}"
+
+    - name: Propagate verdict
+      shell: bash
+      run: |
+        exit "${FLOWHARNESS_SCAN_CODE:-2}"
