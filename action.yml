@@ -38,7 +38,7 @@ runs:
         FLOWHARNESS_SCAN_FAIL_ON: ${{ inputs.fail-on }}
       run: |
         code=0
-        uvx --no-config --no-sources --from flowharness==0.1.1 flowharness-scan "$FLOWHARNESS_SCAN_DIRECTORY" \
+        uvx --no-config --no-sources --from flowharness==0.1.2 flowharness-scan "$FLOWHARNESS_SCAN_DIRECTORY" \
           --format github --fail-on "$FLOWHARNESS_SCAN_FAIL_ON" || code=$?
         echo "FLOWHARNESS_SCAN_CODE=$code" >> "$GITHUB_ENV"
         echo "exit-code=$code" >> "$GITHUB_OUTPUT"
