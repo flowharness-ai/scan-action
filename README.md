@@ -73,8 +73,8 @@ The scanner itself makes no network calls once its released package is
 available. Workflow setup can fetch declared Actions, and `uvx` can contact
 PyPI and package hosts to acquire the released `flowharness` package and its
 dependencies before a scan starts. The action invokes `uvx` with
-`--no-config --no-sources` so checkout-provided package configuration and
-sources are not used for resolution.
+`--no-config --no-sources` so package resolution is isolated from persistent
+user or system uv configuration and configured sources.
 
 This public repository contains the browsable composite Action source. The
 released Python package is distributed through PyPI, and the public [Scan
