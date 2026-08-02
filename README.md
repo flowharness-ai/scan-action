@@ -76,11 +76,16 @@ dependencies before a scan starts. The action invokes `uvx` with
 `--no-config --no-sources` so package resolution is isolated from persistent
 user or system uv configuration and configured sources.
 
-This public repository contains the browsable composite Action source. The
-released Python package is distributed through PyPI, and the public [Scan
-guide](https://github.com/flowharness-ai/flowharness/blob/main/docs/scan.md)
-describes the released tool and its provenance. The local tool and this GitHub
-Action are Apache-2.0.
+This public repository contains the browsable composite Action source and is
+the reviewed release and export surface for the Scan composite Action.
+Upstream/internal development may export reviewed Action bytes here one-way
+for public release; this repository is not the canonical source for the
+commercial platform or Python package. Public users should rely on this
+repository's reviewed tag and immutable commit (including the exact Action pin
+above), plus the PyPI source distribution (sdist) documented in the public
+[Scan guide](https://github.com/flowharness-ai/flowharness/blob/main/docs/scan.md),
+to evaluate and use the released Action. They do not need access to non-public
+development sources. The local tool and this GitHub Action are Apache-2.0.
 
 ## Troubleshooting
 
