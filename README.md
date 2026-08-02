@@ -83,7 +83,7 @@ for public release; this repository is not the canonical source for the
 commercial platform or Python package. Public users should rely on this
 repository's reviewed tag and immutable commit (including the exact Action pin
 above), plus the PyPI source distribution (sdist) documented in the public
-[Scan guide](https://github.com/flowharness-ai/flowharness/blob/main/docs/scan.md),
+[source and provenance documentation](https://github.com/flowharness-ai/flowharness/blob/main/docs/source-and-provenance.md),
 to evaluate and use the released Action. They do not need access to non-public
 development sources. The local tool and this GitHub Action are Apache-2.0.
 
