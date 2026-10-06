@@ -25,7 +25,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
-      - uses: flowharness-ai/scan-action@b330eb5e3eec30a0d79c04677eca0da180efc87c # v1.0.1
+      - uses: flowharness-ai/scan-action@fac3d8f7f5b176ccc1deaa0d43de0937b042b464 # v1.1.0
         with:
           directory: "."
           fail-on: "risk"
