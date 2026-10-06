@@ -1,5 +1,5 @@
 # CANONICAL COPY. Published one-way to flowharness-ai/scan-action (marketplace).
-# Any change here must be re-exported there and the v1 tag moved (Checkpoint R).
+# Any change here must be re-exported there and the v1 tag moved.
 name: "FlowHarness Scan"
 description: >-
   Run the published zero-model FlowHarness static scanner with the caller's
@@ -38,7 +38,7 @@ runs:
         FLOWHARNESS_SCAN_FAIL_ON: ${{ inputs.fail-on }}
       run: |
         code=0
-        uvx --no-config --no-sources --from flowharness==0.1.2 flowharness-scan "$FLOWHARNESS_SCAN_DIRECTORY" \
+        uvx --no-config --no-sources --from flowharness==0.3.0 flowharness-scan "$FLOWHARNESS_SCAN_DIRECTORY" \
           --format github --fail-on "$FLOWHARNESS_SCAN_FAIL_ON" || code=$?
         echo "FLOWHARNESS_SCAN_CODE=$code" >> "$GITHUB_ENV"
         echo "exit-code=$code" >> "$GITHUB_OUTPUT"
